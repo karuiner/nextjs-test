@@ -1,10 +1,65 @@
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 import BaseLayout from "./layout";
+import { initializeApp } from "firebase/app";
+import {
+  getMessaging,
+  onMessage,
+  getToken,
+  isSupported,
+} from "firebase/messaging";
 
 export default function Home() {
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+  let [token, settoken] = useState("");
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    projectId: process.env.projectId,
+    storageBucket: process.env.storageBucket,
+    messagingSenderId: process.env.messagingSenderId,
+    appId: process.env.appId,
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  useEffect(() => {
+    isSupported()
+      .then((isAvailable) => {
+        if (isAvailable) {
+          Notification.requestPermission().then((result) => {
+            console.log(result);
+            const app = initializeApp(firebaseConfig);
+            const messaging = getMessaging(app);
+            console.log("active", process.env.vapidKey);
+            getToken(messaging, { vapidKey: process.env.vapidKey })
+              .then((currentToken) => {
+                if (currentToken) {
+                  // 정상적으로 토큰이 발급되면 콘솔에 출력합니다.
+                  console.log(currentToken);
+                  settoken(currentToken);
+                } else {
+                  console.log(
+                    "No registration token available. Request permission to generate one."
+                  );
+                }
+              })
+              .catch((err) => {
+                console.log("An error occurred while retrieving token. ", err);
+              });
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, []);
   return (
     <BaseLayout>
       <div>
@@ -12,6 +67,7 @@ export default function Home() {
         <Link href="/test">
           <a>테스트로</a>
         </Link>
+        {token}
       </div>
     </BaseLayout>
 
