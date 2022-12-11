@@ -1,7 +1,7 @@
 import Link from "next/link";
-import BaseLayout from "../layout";
+import BaseLayout from "../../component/layout";
 
-export default function Test() {
+export default function Login() {
   return (
     <BaseLayout>
       <div>
