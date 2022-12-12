@@ -3,7 +3,6 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import BaseLayout from "../component/layout";
-import useSWR from "swr";
 import Main from "../component/main";
 import Admin from "../component/admin";
 
@@ -12,20 +11,8 @@ let tdata = {
   role: "",
 };
 
-function SetData() {
-  const { data, mutate } = useSWR("data", () => tdata);
-  return {
-    data: data || {},
-    mutate: (name, value) => {
-      data[name] = value;
-      mutate();
-    },
-  };
-}
-
 export default function Home() {
-  let { data, mutate } = SetData();
-
+  let [data, setdata] = useState(tdata);
   return (
     <>
       {data.login && data.role === "user" ? (
@@ -42,26 +29,14 @@ export default function Home() {
         <BaseLayout>
           <button
             onClick={() => {
-              console.log(data);
-              if (data.login) {
-                mutate("role", "");
-              } else {
-                mutate("role", "user");
-              }
-              mutate("login", !data.login);
+              setdata({ login: !data.login, role: data.login ? "" : "user" });
             }}
           >
             유저 로그인
           </button>
           <button
             onClick={() => {
-              console.log(data);
-              if (data.login) {
-                mutate("role", "");
-              } else {
-                mutate("role", "admin");
-              }
-              mutate("login", !data.login);
+              setdata({ login: !data.login, role: data.login ? "" : "admin" });
             }}
           >
             어드민 로그인

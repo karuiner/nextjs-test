@@ -10,6 +10,7 @@ const nextConfig = {
     appId: "1:534435542828:web:831bb0d4d50d9ea9a3de89",
     vapidKey:
       "BLht3EIp-PEffWBW4lFLWMxf2VNhinmw8Y2jxFgXYIVZqt2i3RuJ6Cb0igpydCDL0Epb_ujLNQ52buvGnOBnfsg",
+    port: 4000,
   },
 };
 
