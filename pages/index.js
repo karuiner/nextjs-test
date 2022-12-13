@@ -5,14 +5,17 @@ import Link from "next/link";
 import BaseLayout from "../component/layout";
 import Main from "../component/main";
 import Admin from "../component/admin";
+import { useRecoilState } from "recoil";
+import { rootState } from "../extra/state";
 
-let tdata = {
-  login: false,
-  role: "",
-};
+// let tdata = {
+//   login: false,
+//   role: "",
+// };
 
 export default function Home() {
-  let [data, setdata] = useState(tdata);
+  // let [data, setdata] = useState(tdata);
+  const [data, setdata] = useRecoilState(rootState);
   return (
     <>
       {data.login && data.role === "user" ? (
