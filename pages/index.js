@@ -7,15 +7,17 @@ import Main from "../component/main";
 import Admin from "../component/admin";
 import { useRecoilState } from "recoil";
 import { rootState } from "../extra/state";
-
-// let tdata = {
-//   login: false,
-//   role: "",
-// };
+import { Router, useRouter } from "next/router";
 
 export default function Home() {
-  // let [data, setdata] = useState(tdata);
   const [data, setdata] = useRecoilState(rootState);
+  const router = useRouter();
+  useEffect(() => {
+    if (!data.login) {
+      router.push("/login");
+    }
+  });
+
   return (
     <>
       {data.login && data.role === "user" ? (
@@ -26,27 +28,6 @@ export default function Home() {
       {data.login && data.role === "admin" ? (
         <BaseLayout>
           <Main></Main>
-        </BaseLayout>
-      ) : null}
-      {!data.login ? (
-        <BaseLayout>
-          <button
-            onClick={() => {
-              setdata({ login: !data.login, role: data.login ? "" : "user" });
-            }}
-          >
-            유저 로그인
-          </button>
-          <button
-            onClick={() => {
-              setdata({ login: !data.login, role: data.login ? "" : "admin" });
-            }}
-          >
-            어드민 로그인
-          </button>
-          <button>역활 수정 </button>
-          <div>{data.login}</div>
-          <div>{data.role}</div>
         </BaseLayout>
       ) : null}
     </>
